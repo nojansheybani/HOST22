@@ -1,6 +1,5 @@
 import numpy as np
-
-
+import pickle
 
 class hashtag:
     def __init__(self):
@@ -12,7 +11,7 @@ class hashtag:
         idx = x^self.hash
         self.hash = self.hash_table[idx]
 
-        print(x, idx, self.hash)
+        # print(x, idx, self.hash)
 
     def hashtag(self, x, mode, idx):
 
@@ -27,7 +26,6 @@ class hashtag:
             return self.hash
         return 0
 
-
 def main(layer):
     Hashtag_ = hashtag()
 
@@ -39,14 +37,13 @@ def main(layer):
     mode = 1
     i = 0
     for line in lines:
-        
         val = line.strip()
         Hashtag_.hashtag(int(float(val)), mode, i)
         i += 1
     fp1.close()
 
     mode = 2
-    fp2 = open(f'{layer}.dat', 'r')
+    fp2 = open(f'weights/{layer}.dat', 'r')
     lines = fp2.readlines()
     i = 0
 
@@ -54,14 +51,15 @@ def main(layer):
         val = line.strip()
         if i >20:
             break
-        print(float(val))
-        Hashtag_.hashtag(int(float(val)*1000), mode, 0)
+        # print(float(val))
+        Hashtag_.hashtag(int(float(val)*1000) % 256, mode, 0)
         i += 1
     fp2.close()
 
     mode = 3
     hash = Hashtag_.hashtag(int(float(val)*1000), mode, 0)
-    print("final hash:", hash)
+    # print("final hash:", hash)
+    return hash
 
 if __name__ == '__main__':
 	main()

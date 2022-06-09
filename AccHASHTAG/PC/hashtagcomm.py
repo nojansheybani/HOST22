@@ -13,6 +13,8 @@ def createSSHClient(server, port, user, password):
 # port = 22
 # user = "xilinx"
 # password = "xilinx"
+
+
 def communicate():
     server = "acesipu.ucsd.edu"
     port = 22
@@ -22,10 +24,10 @@ def communicate():
     ssh = createSSHClient(server, port, user, password)
     scp = SCPClient(ssh.get_transport())
 
-    while True:
-        scp.put("weights", recursive=True)
-        time.sleep(1)
-        scp.get("copy.txt")
-        time.sleep(1)
+    # while True:
+    scp.put("weights", "~/HOST22/acchashtag/", recursive=True)
+    time.sleep(1)
+    scp.get("~/HOST22/acchashtag/fpgahashes.pkl")
+    time.sleep(1)
     
 # communicate()
