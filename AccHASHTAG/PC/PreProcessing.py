@@ -8,6 +8,11 @@ from torch import nn
 import copy
 from hashtagcomm import *
 from pearson_hash import *
+import torch.nn.functional as F
+
+class Flatten(nn.Module):
+    def forward(self, input):
+        return input.view(input.size(0), -1)
 
 class Model(Module):
     def __init__(self):
@@ -41,6 +46,32 @@ class Model(Module):
         y = self.relu5(y)
         return y
 
+class LeNet5(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 6, kernel_size=5, stride=1)
+        self.average1 = nn.AvgPool2d(2, stride=2)
+        self.conv2 = nn.Conv2d(6, 16, kernel_size=5, stride=1)
+        self.average2 = nn.AvgPool2d(2, stride=2)
+        self.conv3 = nn.Conv2d(16, 120, kernel_size=4, stride=1)
+        
+        self.flatten = Flatten()
+        
+        self.fc1 = nn.Linear(120, 82)
+        self.fc2 = nn.Linear(82,10)
+
+    def forward(self, xb):
+        xb = xb.view(-1, 1, 28, 28)
+        xb = F.tanh(self.conv1(xb))
+        xb = self.average1(xb)
+        xb = F.tanh(self.conv2(xb))
+        xb = self.average2(xb)
+        xb = F.tanh(self.conv3(xb))
+        xb = xb.view(-1, xb.shape[1])
+        xb = F.relu(self.fc1(xb))
+        xb = F.relu(self.fc2(xb))
+        return xb
+
 def save_dict(di_, filename_):
     with open(filename_, 'wb') as f:
         pickle.dump(di_, f)
@@ -51,8 +82,8 @@ def load_dict(filename_):
     return ret_di
 
 def preprocess():
-    lenet5 = Model()
-    # torch.save(lenet5.state_dict(), "lenet.pth")
+    lenet5 = LeNet5()
+#     torch.save(lenet5.state_dict(), "lenet.pth")
     lenet5.load_state_dict(torch.load("lenet.pth"))
     hash_dict = {}
     layerDict = {}
@@ -84,7 +115,11 @@ def bitFlip(model, layer):
     weights = noisy_dict[f"{layer}.weight"]
     shape = weights.shape
     bitflip = np.ones(shape)
-    bitflip[0][0][0][0] = -1
+    print(shape)
+    if bitflip.ndim == 4:
+        bitflip[0][0][0][0] = -1
+    else:
+        bitflip[0][0] = -1
     noisy_dict[f"{layer}.weight"] = weights * bitflip
     model.load_state_dict(noisy_dict)
     weightlist = list(np.array(noisy_dict[f"{layer}.weight"]).flatten())
