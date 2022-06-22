@@ -15,8 +15,7 @@ def extract_BIBD_code(corr_score):
     recovered_coeff =  (int_coeff+1)/2            # change back to {0, 1}
     return recovered_coeff.astype(int)
 
-
-if __name__ == '__main__':
+def check_FP():
     orthonormal_mats = np.loadtxt('orthonormalB.txt', delimiter=',' )
     # print('orthonormal_mats shape = ', orthonormal_mats.shape)
     projX = np.loadtxt('sharedProjectionMatrix.txt', delimiter=',')

@@ -16,7 +16,7 @@ def extract_BIBD_code(corr_score):
     return recovered_coeff.astype(int)
 
 
-if __name__ == '__main__':
+def check_FP():
     # print('Load orthonormal basis matrix')
     orthonormal_mats = np.loadtxt('orthonormal_B_Dim31.txt', delimiter=',' )
     # print('orthonormal_mats shape = ', orthonormal_mats.shape)
