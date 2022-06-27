@@ -16,27 +16,27 @@ def createSSHClient(server, port, user, password):
 
 
 def communicate_valid():
-    server = "acesipu.ucsd.edu"
+    server = "192.168.3.2"
     port = 22
-    user = "nojan"
-    password = "Zb9$Og@O+3AHsR5++5Rs"
+    user = "xilinx"
+    password = "xilinx"
 
     ssh = createSSHClient(server, port, user, password)
     scp = SCPClient(ssh.get_transport())
 
     # while True:
-    scp.get("~/HOST22/hatnet/valid/", recursive=True)
+    scp.get("/home/xilinx/valid/", recursive=True)
     
 def communicate_invalid():
-    server = "acesipu.ucsd.edu"
+    server = "192.168.2.99"
     port = 22
-    user = "nojan"
-    password = "Zb9$Og@O+3AHsR5++5Rs"
+    user = "xilinx"
+    password = "xilinx"
 
     ssh = createSSHClient(server, port, user, password)
     scp = SCPClient(ssh.get_transport())
 
     # while True:
-    scp.get("~/HOST22/hatnet/invalid/", recursive=True)
+    scp.get("/home/xilinx/invalid/", recursive=True)
     
 # communicate()

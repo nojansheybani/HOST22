@@ -15,7 +15,7 @@ def extract_BIBD_code(corr_score):
     recovered_coeff =  (int_coeff+1)/2            # change back to {0, 1}
     return recovered_coeff.astype(int)
 
-def check_FP(model, layer):
+def check_FP(board, model, layer):
     if layer == "FC" and model=="mnist":
         orthonormal_mats = np.loadtxt(f'{model}/{layer}_layer/orthonormalB.txt', delimiter=',' )
         # print('orthonormal_mats shape = ', orthonormal_mats.shape)
@@ -26,7 +26,7 @@ def check_FP(model, layer):
         code_len = 31
         embed_dim = 512   ## const 
         i = 0             ## fp id 
-        marked_FC_weights = np.load(f'invalid/{model}_marked{layer}_weights.npy')
+        marked_FC_weights = np.load(f'{board}/{model}_marked{layer}_weights.npy')
         print('marked_FC_weights shape = ', marked_FC_weights.shape)
 
         marked_FC_weights_avg = np.mean(marked_FC_weights, axis=-1)
